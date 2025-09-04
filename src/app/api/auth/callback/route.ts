@@ -6,6 +6,8 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/'
 
+  console.log('Auth callback received:', { code: code ? 'present' : 'missing', origin, next })
+
   if (code) {
     try {
       const supabase = await createServerClientOnly()
