@@ -4,9 +4,10 @@ import { createServerClientOnly } from '@/lib/supabaseServerOnly'
 // GET /api/recruiter/student/[id] - Get single student with optional signed resume
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createServerClientOnly()
     
     // Check if user is recruiter or admin
@@ -44,7 +45,7 @@ export async function GET(
           auth_user_id
         )
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (studentError || !student) {
@@ -55,7 +56,7 @@ export async function GET(
     const { data: latestInterview } = await supabase
       .from('interview')
       .select('rating_overall, rating_tech, rating_comm, feedback, created_at')
-      .eq('student_id', params.id)
+      .eq('student_id', id)
       .eq('recruiter_id', appUser.id)
       .order('created_at', { ascending: false })
       .limit(1)

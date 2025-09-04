@@ -7,16 +7,25 @@ import { AppUser } from '@/lib/authClient'
 import { Student, Interview } from '@/types'
 
 interface StudentDetailPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default function StudentDetailPage({ params }: StudentDetailPageProps) {
+  const [id, setId] = useState<string | null>(null)
   const [user, setUser] = useState<AppUser | null>(null)
   const [student, setStudent] = useState<Student | null>(null)
   const [interviews, setInterviews] = useState<Interview[]>([])
   const [loading, setLoading] = useState(true)
   const [resumeUrl, setResumeUrl] = useState<string | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params
+      setId(resolvedParams.id)
+    }
+    resolveParams()
+  }, [params])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -37,10 +46,10 @@ export default function StudentDetailPage({ params }: StudentDetailPageProps) {
   }, [router])
 
   useEffect(() => {
-    if (user) {
+    if (user && id) {
       fetchStudentData()
     }
-  }, [user, params.id])
+  }, [user, id])
 
   const fetchStudentData = async () => {
     try {
@@ -49,7 +58,7 @@ export default function StudentDetailPage({ params }: StudentDetailPageProps) {
       const studentsData = await studentResponse.json()
       
       if (studentsData.items) {
-        const studentData = studentsData.items.find((s: Student) => s.id === params.id)
+        const studentData = studentsData.items.find((s: Student) => s.id === id)
         if (studentData) {
           setStudent(studentData)
           

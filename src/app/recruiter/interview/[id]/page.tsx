@@ -22,8 +22,10 @@ async function getStudentData(studentId: string) {
 export default async function InterviewPageRoute({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
+  
   // Server-side recruiter/admin guard
   const supabase = await createServerClientOnly()
   
@@ -43,7 +45,7 @@ export default async function InterviewPageRoute({
   }
 
   // Fetch student data
-  const studentData = await getStudentData(params.id)
+  const studentData = await getStudentData(id)
 
   if (!studentData) {
     redirect('/recruiter')
