@@ -22,6 +22,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
+    // Get active event
+    const { data: activeEvent, error: eventError } = await supabase
+      .from('recruiting_event')
+      .select('id')
+      .eq('is_active', true)
+      .single()
+
+    if (eventError || !activeEvent) {
+      return NextResponse.json({ error: 'No active recruiting event found' }, { status: 400 })
+    }
+
     const { searchParams } = new URL(request.url)
     const university = searchParams.get('university') || ''
     const degree = searchParams.get('degree') || ''
