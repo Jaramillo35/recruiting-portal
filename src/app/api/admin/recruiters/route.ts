@@ -78,48 +78,52 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email } = inviteRecruiterSchema.parse(body)
 
-    // Check if user already exists
-    const { data: existingUser } = await supabase.auth.admin.getUserByEmail(email)
-    
-    if (existingUser.user) {
-      // User exists, update their role to recruiter
-      const { error: updateError } = await supabase
-        .from('app_user')
-        .update({ role: 'recruiter' })
-        .eq('auth_user_id', existingUser.user.id)
+    // Try to create new user and invite
+    const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+      email,
+      email_confirm: true,
+      user_metadata: { role: 'recruiter' }
+    })
 
-      if (updateError) {
-        console.error('Error updating user role:', updateError)
-        return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 })
+    if (createError) {
+      // If user already exists, try to update their role
+      if (createError.message.includes('already registered')) {
+        // Find the existing user by email
+        const { data: users } = await supabase.auth.admin.listUsers()
+        const existingUser = users.users.find(u => u.email === email)
+        
+        if (existingUser) {
+          // Update app_user role to recruiter
+          const { error: updateError } = await supabase
+            .from('app_user')
+            .update({ role: 'recruiter' })
+            .eq('auth_user_id', existingUser.id)
+
+          if (updateError) {
+            console.error('Error updating user role:', updateError)
+            return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 })
+          }
+
+          return NextResponse.json({ message: 'User promoted to recruiter' })
+        }
       }
-
-      return NextResponse.json({ message: 'User promoted to recruiter' })
-    } else {
-      // Create new user and invite
-      const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
-        email,
-        email_confirm: true,
-        user_metadata: { role: 'recruiter' }
-      })
-
-      if (createError) {
-        console.error('Error creating user:', createError)
-        return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
-      }
-
-      // Update app_user role to recruiter
-      const { error: updateError } = await supabase
-        .from('app_user')
-        .update({ role: 'recruiter' })
-        .eq('auth_user_id', newUser.user.id)
-
-      if (updateError) {
-        console.error('Error updating app_user role:', updateError)
-        return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 })
-      }
-
-      return NextResponse.json({ message: 'Recruiter invited successfully' })
+      
+      console.error('Error creating user:', createError)
+      return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
     }
+
+    // Update app_user role to recruiter for new user
+    const { error: updateError } = await supabase
+      .from('app_user')
+      .update({ role: 'recruiter' })
+      .eq('auth_user_id', newUser.user.id)
+
+    if (updateError) {
+      console.error('Error updating app_user role:', updateError)
+      return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 })
+    }
+
+    return NextResponse.json({ message: 'Recruiter invited successfully' })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 })
