@@ -68,8 +68,35 @@ export async function GET(request: NextRequest) {
       query = query.is('resume_path', null)
     }
 
-    // Get total count for pagination
-    const { count } = await query.select('*', { count: 'exact', head: true })
+    // Get total count for pagination (with same filters)
+    let countQuery = supabase
+      .from('student')
+      .select('*', { count: 'exact', head: true })
+      .eq('event_id', activeEvent.id)
+
+    // Apply same filters to count query
+    if (query) {
+      countQuery = countQuery.or(`name.ilike.%${query}%,email.ilike.%${query}%,university.ilike.%${query}%`)
+    }
+    if (university) {
+      countQuery = countQuery.ilike('university', `%${university}%`)
+    }
+    if (degree) {
+      countQuery = countQuery.ilike('degree', `%${degree}%`)
+    }
+    if (gpaMin) {
+      countQuery = countQuery.gte('gpa', parseFloat(gpaMin))
+    }
+    if (gpaMax) {
+      countQuery = countQuery.lte('gpa', parseFloat(gpaMax))
+    }
+    if (hasResume === 'true') {
+      countQuery = countQuery.not('resume_path', 'is', null)
+    } else if (hasResume === 'false') {
+      countQuery = countQuery.is('resume_path', null)
+    }
+
+    const { count } = await countQuery
 
     // Apply pagination
     const from = (page - 1) * pageSize
