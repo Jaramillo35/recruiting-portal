@@ -13,8 +13,8 @@ export function NavWrapper() {
       try {
         const response = await fetch('/api/auth/me')
         if (response.ok) {
-          const userData = await response.json()
-          setUser(userData)
+          const data = await response.json()
+          setUser(data.user)
         }
       } catch (error) {
         console.error('Auth check failed:', error)

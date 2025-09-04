@@ -29,7 +29,7 @@ export function Nav({ user }: NavProps) {
           </div>
           
           <div className="flex items-center space-x-4">
-            {user ? (
+            {user && user.role ? (
               <>
                 <span className="text-sm text-gray-700">
                   {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
