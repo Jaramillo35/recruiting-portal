@@ -9,6 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        'aptiv-orange': '#FF4A00',
+        'aptiv-orange-hover': '#e03e00',
+        'aptiv-black': '#000000',
         'aptiv-blue': '#003366',
         'aptiv-light-blue': '#0066CC',
         'aptiv-gray': '#666666',

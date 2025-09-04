@@ -65,7 +65,8 @@ export async function GET(request: NextRequest) {
     const user = await requireRole('admin')
     const supabase = await createServerClientOnly()
 
-    const { data, error } = await supabase
+    // Get all events
+    const { data: events, error } = await supabase
       .from('recruiting_event')
       .select('*')
       .order('created_at', { ascending: false })
@@ -74,7 +75,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 })
     }
 
-    return NextResponse.json(data)
+    // Get active event with metrics
+    const activeEvent = events?.find(event => event.is_active)
+    
+    if (activeEvent) {
+      // Get student count for active event
+      const { count: studentCount } = await supabase
+        .from('student')
+        .select('*', { count: 'exact', head: true })
+
+      // Get total interviews count
+      const { count: interviewCount } = await supabase
+        .from('interview')
+        .select('*', { count: 'exact', head: true })
+
+      return NextResponse.json({
+        events,
+        activeEvent: {
+          ...activeEvent,
+          studentCount: studentCount || 0,
+          interviewCount: interviewCount || 0
+        }
+      })
+    }
+
+    return NextResponse.json({
+      events,
+      activeEvent: null
+    })
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
