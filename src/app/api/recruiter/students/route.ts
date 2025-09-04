@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get('query') || ''
     const university = searchParams.get('university') || ''
     const degree = searchParams.get('degree') || ''
-    const gpaMin = searchParams.get('gpaMin')
-    const gpaMax = searchParams.get('gpaMax')
+    const gpaMin = parseFloat(searchParams.get('gpaMin') || '0')
+    const gpaMax = parseFloat(searchParams.get('gpaMax') || '10')
     const hasResume = searchParams.get('hasResume')
     const page = parseInt(searchParams.get('page') || '1')
     const pageSize = parseInt(searchParams.get('pageSize') || '20')
@@ -71,11 +71,11 @@ export async function GET(request: NextRequest) {
     if (degree) {
       studentQuery = studentQuery.ilike('degree', `%${degree}%`)
     }
-    if (gpaMin) {
-      studentQuery = studentQuery.gte('gpa', parseFloat(gpaMin))
+    if (!isNaN(gpaMin) && gpaMin > 0) {
+      studentQuery = studentQuery.gte('gpa', gpaMin)
     }
-    if (gpaMax) {
-      studentQuery = studentQuery.lte('gpa', parseFloat(gpaMax))
+    if (!isNaN(gpaMax) && gpaMax < 10) {
+      studentQuery = studentQuery.lte('gpa', gpaMax)
     }
     if (hasResume === 'true') {
       studentQuery = studentQuery.not('resume_path', 'is', null)
@@ -117,10 +117,10 @@ export async function GET(request: NextRequest) {
     if (degree) {
       countQuery = countQuery.ilike('degree', `%${degree}%`)
     }
-    if (!isNaN(gpaMin)) {
+    if (!isNaN(gpaMin) && gpaMin > 0) {
       countQuery = countQuery.gte('gpa', gpaMin)
     }
-    if (!isNaN(gpaMax)) {
+    if (!isNaN(gpaMax) && gpaMax < 10) {
       countQuery = countQuery.lte('gpa', gpaMax)
     }
     if (hasResume === 'true') {
