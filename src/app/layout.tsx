@@ -6,8 +6,8 @@ import { NavWrapper } from "@/components/NavWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Recruiting Portal",
-  description: "Student recruitment and interview management system",
+  title: "Aptiv Recruiting Portal",
+  description: "Aptiv student recruitment and interview management system",
 };
 
 export default function RootLayout({
@@ -18,6 +18,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
+        <div className="bg-aptiv-blue">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/aptiv-logo.png" 
+                  alt="Aptiv" 
+                  className="h-8 w-auto"
+                />
+                <span className="text-white font-semibold text-lg">Recruiting Portal</span>
+              </div>
+              <div className="text-white text-sm">
+                Powered by Aptiv
+              </div>
+            </div>
+          </div>
+        </div>
         <NavWrapper />
         <main className="min-h-screen bg-gray-50">
           {children}
