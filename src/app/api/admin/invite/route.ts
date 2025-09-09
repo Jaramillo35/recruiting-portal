@@ -31,7 +31,21 @@ export async function POST(request: NextRequest) {
       .update({ role: 'recruiter' })
       .eq('auth_user_id', newUser.user.id)
 
-    // Send invitation email
+    // Send magic link for recruiter
+    const { error: magicLinkError } = await supabase.auth.admin.generateLink({
+      type: 'magiclink',
+      email: validatedData.email,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/recruiter`
+      }
+    })
+
+    if (magicLinkError) {
+      console.error('Magic link generation error:', magicLinkError)
+      return NextResponse.json({ error: 'Failed to generate login link' }, { status: 500 })
+    }
+
+    // Send invitation email with magic link
     const { error: emailError } = await resend.emails.send({
       from: 'careers@company.com',
       to: [validatedData.email],
@@ -39,8 +53,8 @@ export async function POST(request: NextRequest) {
       html: `
         <h2>Welcome to the Recruiting Portal</h2>
         <p>You've been invited to join our recruiting team as a recruiter.</p>
-        <p>Please sign in using your email address: <strong>${validatedData.email}</strong></p>
-        <p>You can access the portal at: <a href="${process.env.NEXT_PUBLIC_APP_URL}/login">${process.env.NEXT_PUBLIC_APP_URL}/login</a></p>
+        <p>Click the link below to sign in with your email address: <strong>${validatedData.email}</strong></p>
+        <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/login" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Sign In to Portal</a></p>
         <p>Best regards,<br>The Recruiting Team</p>
       `
     })

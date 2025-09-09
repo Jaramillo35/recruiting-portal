@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabaseBrowser'
 
 export default function LoginPage() {
@@ -9,7 +9,28 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+
+  useEffect(() => {
+    // Check for error messages in URL
+    const error = searchParams.get('error')
+    if (error) {
+      switch (error) {
+        case 'auth_exchange_error':
+          setMessage('Authentication failed. Please try again.')
+          break
+        case 'auth_callback_error':
+          setMessage('Login failed. Please try again.')
+          break
+        case 'no_code':
+          setMessage('Invalid login link. Please request a new one.')
+          break
+        default:
+          setMessage('An error occurred. Please try again.')
+      }
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,10 +38,11 @@ export default function LoginPage() {
     setMessage('')
 
     try {
+      const redirectTo = searchParams.get('redirectTo') || '/'
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(redirectTo)}`,
         },
       })
 

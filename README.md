@@ -54,6 +54,14 @@ npm install
 3. Run the SQL schema from `supabase-schema.sql` to create all tables and policies
 4. Enable Row Level Security (RLS) on all tables
 5. Create a storage bucket named `resumes` (private)
+6. **Configure Authentication Settings:**
+   - Go to Authentication > Settings in your Supabase dashboard
+   - Under "Site URL", add your production URL (e.g., `https://your-app.vercel.app`)
+   - Under "Redirect URLs", add:
+     - `http://localhost:3000/api/auth/callback` (for development)
+     - `https://your-app.vercel.app/api/auth/callback` (for production)
+   - Enable "Enable email confirmations" if you want email verification
+   - Under "Email Templates", customize the magic link email template if needed
 
 ### 3. Environment Variables
 
@@ -238,9 +246,12 @@ src/
 ### Common Issues
 
 1. **Magic Link Not Working**
-   - Check Supabase auth settings
-   - Ensure redirect URLs are configured
-   - Check email delivery settings
+   - Check Supabase auth settings and ensure redirect URLs are configured correctly
+   - Verify that `NEXT_PUBLIC_APP_URL` environment variable is set correctly
+   - Check that the callback URL `/api/auth/callback` is added to Supabase redirect URLs
+   - Ensure email delivery is working (check Supabase logs for email sending errors)
+   - For development, make sure you're using `http://localhost:3000` in redirect URLs
+   - For production, ensure your production URL is added to Supabase redirect URLs
 
 2. **File Upload Issues**
    - Verify Supabase storage bucket exists

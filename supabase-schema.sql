@@ -63,9 +63,12 @@ for select using (exists (
   where au.auth_user_id = auth.uid() and au.role in ('admin','recruiter')
 ));
 
--- student: students can select/update their own student row
-create policy student_self_rw on student
-for select using (exists (select 1 from app_user u where u.id = student.id and u.auth_user_id = auth.uid()))
+-- student: students can select their own student row
+create policy student_self_select on student
+for select using (exists (select 1 from app_user u where u.id = student.id and u.auth_user_id = auth.uid()));
+
+-- student: students can update their own student row
+create policy student_self_update on student
 for update using (exists (select 1 from app_user u where u.id = student.id and u.auth_user_id = auth.uid()));
 
 -- student: recruiters/admins can read all students for active event
@@ -89,8 +92,10 @@ for select using (exists (
 create policy event_read_auth on recruiting_event
 for select using (auth.uid() is not null);
 
--- Create storage bucket for resumes
-insert into storage.buckets (id, name, public) values ('resumes', 'resumes', false);
+-- Create storage bucket for resumes (if it doesn't exist)
+insert into storage.buckets (id, name, public) 
+values ('resumes', 'resumes', false)
+on conflict (id) do nothing;
 
 -- Storage policies for resumes
 create policy "Users can upload their own resume" on storage.objects
