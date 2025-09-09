@@ -59,17 +59,23 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-aptiv-black to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            We&apos;ll send you a magic link to sign in
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <div className="text-center">
+            <img 
+              src="/aptiv-logo.png" 
+              alt="Aptiv" 
+              className="h-12 w-auto mx-auto mb-6"
+            />
+            <h2 className="text-3xl font-extrabold text-aptiv-black">
+              Sign in to your account
+            </h2>
+            <p className="mt-2 text-sm text-aptiv-gray">
+              We&apos;ll send you a magic link to sign in
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="sr-only">
               Email address
@@ -80,7 +86,7 @@ function LoginForm() {
               type="email"
               autoComplete="email"
               required
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-aptiv-black focus:outline-none focus:ring-2 focus:ring-aptiv-orange focus:border-aptiv-orange focus:z-10 text-sm"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -91,20 +97,21 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aptiv-orange disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
               {loading ? 'Sending...' : 'Send Magic Link'}
             </button>
           </div>
 
-          {message && (
-            <div className={`text-sm text-center ${
-              message.includes('Check your email') ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {message}
-            </div>
-          )}
-        </form>
+            {message && (
+              <div className={`text-sm text-center ${
+                message.includes('Check your email') ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {message}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   )
@@ -112,22 +119,29 @@ function LoginForm() {
 
 function LoadingFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-aptiv-black to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            We&apos;ll send you a magic link to sign in
-          </p>
-        </div>
-        <div className="mt-8 space-y-6">
-          <div className="animate-pulse">
-            <div className="h-10 bg-gray-200 rounded-md"></div>
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <div className="text-center">
+            <img 
+              src="/aptiv-logo.png" 
+              alt="Aptiv" 
+              className="h-12 w-auto mx-auto mb-6"
+            />
+            <h2 className="text-3xl font-extrabold text-aptiv-black">
+              Sign in to your account
+            </h2>
+            <p className="mt-2 text-sm text-aptiv-gray">
+              We&apos;ll send you a magic link to sign in
+            </p>
           </div>
-          <div className="animate-pulse">
-            <div className="h-10 bg-gray-200 rounded-md"></div>
+          <div className="mt-8 space-y-6">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 rounded-lg"></div>
+            </div>
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 rounded-lg"></div>
+            </div>
           </div>
         </div>
       </div>
