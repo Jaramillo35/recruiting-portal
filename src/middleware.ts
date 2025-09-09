@@ -35,6 +35,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Skip middleware for auth callback to avoid redirect loops
+  if (request.nextUrl.pathname.startsWith('/api/auth/callback')) {
+    return supabaseResponse
+  }
+
   // Protected routes
   const protectedRoutes = ['/admin', '/recruiter', '/apply']
   const isProtectedRoute = protectedRoutes.some(route => 

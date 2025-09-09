@@ -77,14 +77,14 @@ export default function Home() {
                 {user?.role === 'student' ? (
                   <Link
                     href="/apply"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200 shadow-lg hover:shadow-xl"
                   >
                     Update Application
                   </Link>
                 ) : (
                   <Link
                     href="/login?redirectTo=/apply"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200 shadow-lg hover:shadow-xl"
                     onClick={() => console.log('Student login clicked')}
                   >
                     Get Started
@@ -122,14 +122,14 @@ export default function Home() {
                 {user?.role === 'recruiter' ? (
                   <Link
                     href="/recruiter"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-black hover:bg-gray-800 transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-black hover:bg-gray-800 transition-colors duration-200 shadow-lg hover:shadow-xl"
                   >
                     Go to Dashboard
                   </Link>
                 ) : (
                   <Link
                     href="/login?redirectTo=/recruiter"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-black hover:bg-gray-800 transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-black hover:bg-gray-800 transition-colors duration-200 shadow-lg hover:shadow-xl"
                     onClick={() => console.log('Recruiter login clicked')}
                   >
                     Recruiter Login
@@ -167,14 +167,14 @@ export default function Home() {
                 {user?.role === 'admin' ? (
                   <Link
                     href="/admin"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200 shadow-lg hover:shadow-xl"
                   >
                     Admin Panel
                   </Link>
                 ) : (
                   <Link
                     href="/login?redirectTo=/admin"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200 shadow-lg hover:shadow-xl"
                     onClick={() => console.log('Admin login clicked')}
                   >
                     Admin Login

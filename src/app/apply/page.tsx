@@ -32,9 +32,12 @@ export default function ApplyPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Add a small delay to allow auth state to settle
+        await new Promise(resolve => setTimeout(resolve, 100))
         const userData = await requireAuthClient()
         setUser(userData)
       } catch {
+        console.log('Auth check failed, redirecting to login')
         router.push('/login')
       } finally {
         setLoading(false)
