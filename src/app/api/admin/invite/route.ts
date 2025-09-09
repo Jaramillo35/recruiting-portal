@@ -4,7 +4,12 @@ import { requireRole } from '@/lib/auth'
 import { inviteRecruiterSchema } from '@/lib/validations'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not set')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,6 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Send invitation email with magic link
+    const resend = getResendClient()
     const { error: emailError } = await resend.emails.send({
       from: 'careers@company.com',
       to: [validatedData.email],

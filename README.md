@@ -81,6 +81,8 @@ REPORT_RECEIVER_EMAIL=recruiting-reports@company.com
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
+**Important**: All environment variables are required for the build to succeed. If you don't have a Resend API key yet, you can temporarily set `RESEND_API_KEY=placeholder` to allow the build to complete, but email functionality won't work until you set up a real Resend account.
+
 ### 4. Resend Setup
 
 1. Sign up at [resend.com](https://resend.com)

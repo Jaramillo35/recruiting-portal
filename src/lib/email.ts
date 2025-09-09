@@ -1,7 +1,12 @@
 import { Resend } from 'resend'
 import { StudentReportData } from './csv'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not set')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function sendReportEmail(
   eventName: string,
@@ -37,6 +42,7 @@ export async function sendReportEmail(
     </html>
   `
 
+  const resend = getResendClient()
   const { data, error } = await resend.emails.send({
     from: 'careers@company.com',
     to: [process.env.REPORT_RECEIVER_EMAIL!],
