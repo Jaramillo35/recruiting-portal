@@ -37,20 +37,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-aptiv-black to-gray-900">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <img 
-              src="/aptiv-logo.png" 
-              alt="Aptiv" 
-              className="h-16 w-auto"
-            />
-            <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl">
-              APTIV
-            </h1>
-          </div>
-          <p className="mt-3 max-w-md mx-auto text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+          <h1 className="text-4xl font-bold text-aptiv-black sm:text-5xl md:text-6xl mb-6">
+            Welcome to the Recruiting Portal
+          </h1>
+          <p className="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
             Streamline your recruitment process with Aptiv's comprehensive platform for students, recruiters, and administrators.
           </p>
         </div>
@@ -92,6 +85,7 @@ export default function Home() {
                   <Link
                     href="/login?redirectTo=/apply"
                     className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    onClick={() => console.log('Student login clicked')}
                   >
                     Get Started
                   </Link>
@@ -136,6 +130,7 @@ export default function Home() {
                   <Link
                     href="/login?redirectTo=/recruiter"
                     className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-black hover:bg-gray-800 transition-colors duration-200"
+                    onClick={() => console.log('Recruiter login clicked')}
                   >
                     Recruiter Login
                   </Link>
@@ -180,6 +175,7 @@ export default function Home() {
                   <Link
                     href="/login?redirectTo=/admin"
                     className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-aptiv-orange hover:bg-aptiv-orange-hover transition-colors duration-200"
+                    onClick={() => console.log('Admin login clicked')}
                   >
                     Admin Login
                   </Link>
@@ -191,7 +187,7 @@ export default function Home() {
 
         {!user && (
           <div className="mt-16 text-center">
-            <p className="text-lg text-gray-300 mb-6">
+            <p className="text-lg text-gray-600 mb-6">
               Ready to get started? Sign in to access your role-specific dashboard.
             </p>
             <Link
